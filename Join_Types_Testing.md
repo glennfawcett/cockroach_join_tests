@@ -106,12 +106,11 @@ create table s2 (id string primary key);
 create table i1 (id integer primary key);
 create table i2 (id integer primary key);
 
+insert into u1 select gen_random_uuid() from generate_series(1,1000000);
+insert into u2 select id from u1 offset 400000 limit 200000;
 
-insert into u1 select token from generate_series(1,1000000);
-insert into u2 select token from u1 offset 400000 limit 200000;
-
-insert into s1 select token::string from u1;
-insert into s2 select token::string from u1 offset 400000 limit 200000;
+insert into s1 select id::string from u1;
+insert into s2 select id::string from u1 offset 400000 limit 200000;
 
 insert into i1 select gs from generate_series(1,1000000) as gs;
 insert into i2 select gs from generate_series(400001,600000) as gs;
